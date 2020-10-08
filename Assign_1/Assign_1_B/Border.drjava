@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <drjava version="drjava-20190813-220051">
-  <project autorefresh="false" build="" main="" root="" work="">
+  <project autorefresh="false" build="" root="" work="">
     <createjar file=""/>
     <source>
-      <file active="true" name="Border.java" package="Assign_1_B" timestamp="08-Oct-2020 02:32:15">
-        <select from="989" to="989"/>
-        <scroll column="276" row="0"/>
+      <file active="true" name="Border.java" package="Assign_1_B" timestamp="08-Oct-2020 15:04:20">
+        <select from="122" to="122"/>
+        <scroll column="0" row="0"/>
       </file>
     </source>
     <included/>
