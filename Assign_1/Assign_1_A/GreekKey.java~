@@ -1,8 +1,9 @@
 package Assign_1_A;
 
-import Media.*;
-import static java.lang.Math.*;
-import static java.awt.Color.*;
+import Media.*;                  // for Turtle and TurtleDisplayer
+import static Media.Turtle.*;    // for Turtle speeds
+import static java.lang.Math.*;  // for Math constants and functions
+import static java.awt.Color.*;  // for Color constants
 
 
 /** This class is a program to draw a pattern called Greek Key using different turns
@@ -24,7 +25,7 @@ public class GreekKey {
   public GreekKey ( ) {
     
     display = new TurtleDisplayer();
-    donatello = new Turtle();
+    donatello = new Turtle(FAST);  // for faster drawing
     display.placeTurtle(donatello);  // @var named after the ninja turtle
     
     drawCell(); 
@@ -34,9 +35,9 @@ public class GreekKey {
 };  // constructor
   
 
-    /** This method draws the internal pattern.
-      * It leaves the the turtle 16 positions forward the original position
-      * It does not change the direction of the turtle                                */
+  /** This method draws the internal pattern.
+    * It leaves the the turtle 16 positions forward the original position
+    * It does not change the direction of the turtle                                */
                                                                           
   private void drawCell () {
     donatello.penDown();
@@ -66,7 +67,7 @@ public class GreekKey {
   
   
   
-  //@varName splinter is due to ninja turtles' master name
+  //@var splinter is due to ninja turtles' master name
 public static void main ( String[] args ) { GreekKey splinter = new GreekKey(); };
 
-}
+}  // GreekKey
