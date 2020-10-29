@@ -30,7 +30,7 @@ public class City {
 
   public City ( ) {
     
-    ttl = new Turtle(20); // constructor of the drawing turtle "ttl" with super speed (int lower the faster)
+    ttl = new Turtle(0); // constructor of the drawing turtle "ttl" with super speed (int lower the faster)
     display = new TurtleDisplayer(ttl, 500, 500);  //arguments Turtle, canvas size (pxl x pxl)
     
     display.placeTurtle(ttl);
