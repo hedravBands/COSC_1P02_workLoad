@@ -18,7 +18,7 @@ import static java.awt.Color.*;  // for Color constants
 public class GreekKey {
   private TurtleDisplayer display;    // display to draw on
   private Turtle donatello;           // (ninja) turtle to do the drawing
-
+  private int x, y, sideLength;
   
   /** The constructor draws a Greek Key pattern using repeated method calls for moving and turning.      */
   
@@ -29,7 +29,7 @@ public class GreekKey {
     display.placeTurtle(donatello);  // @var named after the ninja turtle
     
     drawCell(); 
-    
+   
     display.close();
     
 };  // constructor
@@ -68,6 +68,7 @@ public class GreekKey {
   
   
   //@var splinter is due to ninja turtles' master name
-public static void main ( String[] args ) { GreekKey splinter = new GreekKey(); };
+public static void main ( String[] args ) { GreekKey splinter = new GreekKey(); 
+};
 
 }  // GreekKey
