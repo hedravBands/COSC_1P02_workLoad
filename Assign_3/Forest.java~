@@ -7,8 +7,10 @@ import static java.awt.Color.*;  // for Color constants
 
 
 
-/** This class is a program a City as a sequence side-by-side 2D buildings
-  * created for the Assign_3
+/** This class is a program to build a Forest in the Fall season by using 
+  * randomly generated numbers to produce different number and sizes of trees within given ranges.
+  * It also select the color of the leaves between green and red with a proportion 3:1
+  * The layout is horizontally symetric and the ground is vertically centred.
   * 
   * @author Heduin R. B. de Morais (Brock_ID 6967483, Campus_ID hr19ut, Lab#09) 
   * 
@@ -33,18 +35,18 @@ public class Forest {
   public Forest ( ) {
     
     ttl = new Turtle(0); // constructor of the drawing turtle "ttl" with super speed (int lower the faster)
-    canvasSide = 500; //  Let's setup the default, but it is now customizable
+    canvasSide = 300; //  Let's setup the default, but it is now customizable, e.g. try 500 or 800 
     display = new TurtleDisplayer(ttl, canvasSide, canvasSide);  // no parameters = 300 x 300    
     display.placeTurtle(ttl);    
     
     //ramdon number of trees
     int nTree = 5 + randomNumber(5); // [5..10]    
-    System.out.println("Number of trees: " + nTree);    
+    System.out.println("Number of trees: " + nTree);    //debug
     
     // Move the turtle to initial drawing position for evenly-spaced trees
     
     // Move the turtle to initial point, receives spaces in-between trees
-    double spaceX = moveToStart(canvasSide, nTree);
+    double spaceX = moveToStart(canvasSide, nTree);  //moveToStart() returns in-between trees lenght
     
     // Ready to draw the Forest    
     drawForest(nTree, spaceX);    
@@ -86,8 +88,10 @@ public class Forest {
    * It keeps the trees evenly spaced (horizontally)    
    * The turtle ends at the same orientation where it started, i.e. EAST
    * @param canvas is the side of the canvas in pixels 
-   * @param nTree is the number of tree randomly generated before
-  */    
+   * @param nTree is the number of tree randomly generated 
+   * @param inBetween holds the space in between trees
+   * @param startX initial position to start drawing symmetrically
+   */    
   private double moveToStart (int canvas, int nTree) {
     // Find the space inBetween trees to be evenly spaced
     double inBetween = (canvas / (nTree + 1) );  // There are (nTree +1 ) empty spages in-btw the nTree.
@@ -95,7 +99,7 @@ public class Forest {
     
     double startX = (-1)*canvasSide/2 + inBetween; // Go to the extreme left of the canvas and move 1 space EAST
     double startY = 0; // not changed at all
-    System.out.println("StartX: "+ startX);          
+    System.out.println("StartX: "+ startX);        // debug  
     ttl.moveTo(startX, startY);      
     
     return inBetween;   
@@ -107,7 +111,7 @@ public class Forest {
    * The turtle ends at the same position/orientation where it started 
    * @param radius (double as requested) is the size of each spoke
    * @param height lenght of the trunk
-  */      
+   */      
   private void drawTree(int height, double radius){
     
     drawTrunk(height);
@@ -138,10 +142,7 @@ public class Forest {
    * Turtle ends and the same position and orientation as usual
    * It also changes (and unchange) color and width of the pen
    * @param radius of canopy.
-   */  
-  
- 
-  
+   */      
   private void drawSpokes (double radius){
     // change pen color and width    
     ttl.setPenWidth((int)radius*2);
@@ -170,14 +171,13 @@ public class Forest {
   } // end drawSpokes
   
   
-  /* This method draws a trunk of a given tree
+  /* This method draws the trunk of a given tree
    * Notice that the turtle DOES NOT RETURN to be original position
    * It is ready to draw the Canopy
    * It also changes (and unchange) color and width of the pen
    * Turtle ends and the same orientation though, AS USUAL.
    * @param heigth (of a trunk) without canopy.
-   */
-  
+   */  
   private void drawTrunk (int heigth){
     // change pen color and width
     ttl.setPenColor(gray);    

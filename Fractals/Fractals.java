@@ -21,30 +21,22 @@ import static java.awt.Color.*;  // for Color constants
 
 public class Fractals {
   private TurtleDisplayer display; //standard display (300,300) pxl
-  private Turtle h; // the drawing turtle to draw a Hilbert Curve
+  private Turtle h; // the drawing turtle to draw a Pseudo-Hilbert Curve
   private int canvasSide; // the side of canvas
-  //private int nLevel; // equals 4^levels (resolution)
+  private int order; // Pseud-Hilbert Curve has a total of (2^order)^2 squares to be filled up
   
 
   public Fractals ( ) {
     
-    h = new Turtle(50); // constructor of the drawing turtle "ttl" with super speed (int lower the faster)
-    canvasSide = 400; //  Let's setup the default, but it is now customizable
+    h = new Turtle(20); // constructor of the drawing turtle "h" with super speed (int lower the faster)
+    canvasSide = 450; //  Let's setup the default, but it is now customizable
     display = new TurtleDisplayer(h, canvasSide, canvasSide);  //  default 300, 300    
     display.placeTurtle(h); 
-    //nLevel = 1; //pow(4,1); // 4 to the power of n, element of [1,k], max(4^k) is canvasSide (number of pixels per side)
+    order = 3;  
+    int canvas = 400;
     
-    drawGrid(canvasSide);
-    
-    //set initial position
-    //hilbert.moveTo(-canvasSide/2,-canvasSide/2);
-    //hilbert.penDown(); // penUp only when finish
-    
+    drawGrid(canvas);
 
-    
-      
-    drawSeed(canvasSide);
-    
     
     // Ready to close display    
     display.close();
@@ -52,25 +44,78 @@ public class Fractals {
    };  // constructor Hilbert
   
   /* This method draw the grid that will be filled by the Hilbert Curve
-   * @param side (of the square) that must be divided by 4
-   * // @param subSpace number of subspaces to divide the canvas on
+   * @param step in-between spacement of lined of grid, or side of small squares   
   */
-  private void drawGrid(int side){
-    
-   //horizontal line
-   h.backward(side/2); h.penDown();
-   h.forward(side);    h.penUp();
-   h.backward(side/2); //centre  
-   //vertical line
-   h.left(PI/2);
-   h.backward(side/2);  h.penDown();
-   h.forward(side);     h.penUp();
-   h.backward(side/2);  //centre   
-   h.right(PI/2);
-   
   
+  private void drawGrid (int side){
+    if (side <= canvasSide/pow(2,order)){
+      // do not draw here, go back
+      h.moveTo(h.getScreenX()+ side/4, h.getScreenY() + side/4);
+      
+    } else {  
+      
+      h.moveTo(h.getScreenX()-side/4, h.getScreenY() - side/4);
+      drawSet(side/2); // draw 4 squares;
+      
+      drawGrid(side/2);
+      h.moveTo(h.getScreenX()+side/4, h.getScreenY() + side/4);
+    }        
+    
+   
+/*
+        
+//horizontal lines
+   h.moveTo(-canvasSide/2,-canvasSide/2); //left bottom corner
+   for (int j=0; j< pow(2,order)-1; j++){ 
+     h.moveTo(h.getScreenX(), h.getScreenY() + step);
+     h.penDown();
+     h.forward(canvasSide);
+     h.penUp();
+     h.backward(canvasSide);
+   } // end for horizontal
+   h.moveTo(-canvasSide/2,-canvasSide/2); //left bottom corner
+   //vertical lines
+   h.left(PI/2);
+   for (int j=0; j< pow(2,order)-1; j++){ 
+     h.moveTo(h.getScreenX() + step, h.getScreenY());    
+     h.penDown();
+     h.forward(canvasSide);     
+     h.penUp();
+     h.backward(canvasSide);
+   } // end for horizontal
+   h.right(PI/2);
+   h.moveTo(0,0); //back to centre of canvas
+  */
+        
+        
   } // end drawGrid
   
+
+/* this method draws 4 squares sith side half of the parameter
+ * @param side lenght of the outer square
+ * */
+private void drawSet(int side) {
+ //bottom-left
+ h.moveTo(h.getScreenX()-side/2, h.getScreenY() - side/2);
+ //draw a single square
+ h.penDown(); for (int k=0;k<4;k++){h.forward(side/2); h.left(PI/2);} h.penUp();
+ 
+ //bottom-right
+ h.moveTo(h.getScreenX()+side/2, h.getScreenY());
+ //draw a single square
+ h.penDown(); for (int k=0;k<4;k++){h.forward(side/2); h.left(PI/2);} h.penUp();
+ 
+ //up-left
+ h.moveTo(h.getScreenX()-side/2, h.getScreenY() + side/2);
+ //draw a single square
+ h.penDown(); for (int k=0;k<4;k++){h.forward(side/2); h.left(PI/2);} h.penUp();
+ 
+ //up-right
+ h.moveTo(h.getScreenX()+side/2, h.getScreenY());
+ //draw a single square
+ h.penDown(); for (int k=0;k<4;k++){h.forward(side/2); h.left(PI/2);} h.penUp();
+ 
+} //end drawSet
   
   
   /*
