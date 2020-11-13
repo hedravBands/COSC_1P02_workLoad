@@ -3,7 +3,7 @@ package Assign_4_A;
 import Media.*;             
 
 
-/** This class is a program to convert to negative color a given  picture 
+/** This class is a program to convert to negative color a given picture 
  
   * @author Heduin R. B. de Morais (Brock_ID 6967483, Campus_ID hr19ut, Lab#09) 
   * @version 1.0 (Nov. 2020)
@@ -47,13 +47,11 @@ public class Negative {
       p.setGreen(255-p.getGreen());
       p.setBlue (255-p.getBlue());
     } // end while
-    
   } //end makeNegative  
     
-    
+  
 // main function
 public static void main ( String[] args ) { Negative n  = new Negative(); };
-
 
 }  // Negative
     

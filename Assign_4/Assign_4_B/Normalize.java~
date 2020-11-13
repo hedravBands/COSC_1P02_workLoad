@@ -2,10 +2,11 @@ package Assign_4_B;
 
 import Media.*; 
 import static java.lang.Math.*; // max(a,b) to be used
+//import static java.util.*; // to interate the picture one more time;
 
 
 
-/** This class is a program to saturates a picture without extrapolate the 255 RGB value 
+/** This class is a program to Normalize the intensity of brightness of a picture without extrapolate the 255 RGB value 
  
   * @author Heduin R. B. de Morais (Brock_ID 6967483, Campus_ID hr19ut, Lab#09) 
   * @version 1.0 (Nov. 2020)
@@ -15,13 +16,13 @@ import static java.lang.Math.*; // max(a,b) to be used
   * @param pic picture file to be shown
 */
 
-public class Saturation {
+public class Normalize {
   PictureDisplayer display;
   Picture pic;
 
-  public Saturation() {
-    pic = new Picture();  // user select the picture
-    //pic = new Picture("mission_beach_darker.jpg"); // DEBUG: pre-defined picture
+  public Normalize() {
+    //pic = new Picture();  // user select the picture
+    pic = new Picture("../mission_beach_darker.jpg"); // DEBUG: pre-defined picture
     display = new PictureDisplayer(pic);
    
     display.waitForUser(); // Await users see the original, then press OK
@@ -29,22 +30,19 @@ public class Saturation {
     
     //saving before closing makes more sense
     pic.save(); // let's user to pick a name and folder
-    //pic.save("negative.jpg"); // DEBUG: pre-defined output name.jpg (destructive)
+    //pic.save("saturated.jpg"); // DEBUG: pre-defined output name.jpg (destructive)
     
     display.close();
     
-   };  // constructor Saturation
+   };  // constructor Normalize
   
   /* This methose determines the largest channel value of the three channels (R, G and B) of the pixel p
    and returns that value.
    @param p pixel to be analized
-   @return the max value of {R, G, B} by using Math.max funcion of two values
+   @return max of pixels values of {R, G, B} by using Math.max funcion of two values
    */
-  
   private int maxChannel ( Pixel p ) {
     return max(p.getRed(),max(p.getGreen(),p.getBlue()));
-    
-    
   } // end maxChannel  
     
     
@@ -53,30 +51,41 @@ public class Saturation {
    * and then multiplying each channel value of every pixel by this value.
    * @param aPic picture to be saturated
    * @param p pixel to analized for max [R,G,B] = 255
-   * @param maxRGB int returned by maxChannel()
+   * @param maxLocal int returned by maxChannel()
+   * @param maxRGB int max of all maxLocal
    * @param factor int that multiplies RGB to make values [0,255]
    */
 
   private void normIntensity ( Picture aPic ) {
     Pixel p;
-    int maxRGB;
+    int maxRGB = 1;
+    int maxLocal;
     int factor;
+    
+    // collect maximum value
+    while(aPic.hasNext()){
+      maxLocal = maxChannel(aPic.next());
+      if ( maxLocal > maxRGB){        
+        maxRGB = maxLocal;
+        factor = (int)255/maxRGB; 
+        p.setRed  (factor*p.getRed());
+        p.setGreen(factor*p.getGreen());
+        p.setBlue (factor*p.getBlue());
+      
+      }; 
+    } // end while
+      
+    //find the factor
+    
+
+    // apply normalization 
+    //aPic.iterator();  // reset the iterator since there is no next in aPic.hasNext()
+    
     while(aPic.hasNext()){
       p = aPic.next();
-      
-      maxRGB = maxChannel(p); 
-      // to avoid factor to be divided by zero, when pixel is black maxRGB != 0
-      if (maxRGB ==0) {maxRGB++;} 
-      
-      //find the factor
-      factor = (int)255/maxRGB; 
- 
-      //one of [R,G,B] must be 255, the others [0,255]      
-      p.setRed  ((int)factor*p.getRed());
-      p.setGreen((int)factor*p.getGreen());
-      p.setBlue ((int)factor*p.getBlue());
-      
+
     } // end while
+    
     
     
     
@@ -84,8 +93,8 @@ public class Saturation {
 
   
 // main function
-public static void main ( String[] args ) { Saturation s  = new Saturation(); };
+public static void main ( String[] args ) { Normalize n = new Normalize(); };
 
 
-}  // Saturation
+}  // Normalize
     
