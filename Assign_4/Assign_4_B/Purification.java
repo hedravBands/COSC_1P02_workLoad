@@ -1,29 +1,27 @@
-package Assign_4_B;
+package Assign_5;
 
 import Media.*; 
-import static java.lang.Math.*; // max(a,b) to be used
-//import static java.util.*; // to interate the picture one more time;
+import static java.lang.Math.*; // 
 
 
-
-/** This class is a program to Normalize the intensity of brightness of a picture without extrapolate the 255 RGB value 
+/** This class is a program that reduces noise on a sound sample
  
   * @author Heduin R. B. de Morais (Brock_ID 6967483, Campus_ID hr19ut, Lab#09) 
   * @version 1.0 (Nov. 2020)
-  * new concepts: pixels and color channels
+  * new concepts: sound sample, rate, fluctuation over sound waves
   * 
-  * @param display to exibit the pictures
-  * @param pic picture file to be shown
+  * @param 
+  * @param snd sound sample to be purified
 */
 
-public class Normalize {
+public class Purification {
   PictureDisplayer display;
   Picture pic;
 
-  public Normalize() {
-    pic = new Picture();  // user select the picture
-    //pic = new Picture("mission_beach_darker.jpg"); // DEBUG: pre-defined picture
-    display = new PictureDisplayer(pic);
+  public Purification() {
+    snd  = new Sound();  // user select the sound sample
+    //snd  = new Sound(""); // DEBUG: pre-defined picture
+    player = new SoundPlayer(snd);
    
     display.waitForUser(); // Await users see the original, then press OK
     normIntensity(pic);  // non-destructive
@@ -72,7 +70,7 @@ public class Normalize {
       maxLocal = maxChannel(p); // max value per pixel 
       if ( maxLocal > maxRGB){
         maxRGB = maxLocal; //  max of all pixels
-        //System.out.println("New MaxRG: " + maxRGB); // DEBUG
+        System.out.println("New MaxRG: " + maxRGB); // DEBUG
       } //end if
     } // end while
       
@@ -95,8 +93,8 @@ public class Normalize {
 
   
 // main function
-public static void main ( String[] args ) { Normalize n = new Normalize(); };
+public static void main ( String[] args ) { Purification p = new Purification(); };
 
 
-}  // Normalize
+}  // Purification
     
