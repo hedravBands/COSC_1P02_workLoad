@@ -4,7 +4,7 @@ import Media.*;
 import static java.lang.Math.*; // 
 
 
-/** This class is a program that reduces noise on a sound sample
+/** This class is a program that reduces noise on a sound file
  
   * @author Heduin R. B. de Morais (Brock_ID 6967483, Campus_ID hr19ut, Lab#09) 
   * @version 1.0 (Nov. 2020)
@@ -50,24 +50,27 @@ public class Purification {
     System.out.println("NumSamples: " + ns + "\n***************\n");
     //int sr = sound.getSampleRate();
     
-    // scan .wav
+    // scan .wav excluding initial/ending #factor samples
     for(int i = factor; i < ns-factor; i++){
       spl = sound.getSample(i);
       
       double newAmp = 0;
-      // get the average
+      // get the average from -factor to +factor (total of (2*factor + 1) samples) and avarege them
       for (int j = -factor; j <= factor; j++ ){
         newAmp += sound.getSample(i+j).getAmp()/(2*factor+1);  
         //System.out.println("Sample Pos #" + (i+j) + ": " + sound.getSample(i+j).getAmp());
       }
       // set the new Amp
-      spl.setAmp((int)newAmp);
+      spl.setAmp((int)newAmp); // set the average to the center sample
+      
+      // a little of progress output every 1000 samples
       if (i%1000 == 0){
         System.out.println("Sample Pos #" + i + ": " + newAmp + "\n* * * * * * \n");
       }
       
     } // end for
     
+    // Dealing with inital / ending samples: requested to be muted, i.e., amp = 0
     System.out.println("\nFixing Borderline Disorder: (start && end) set to zero \n");
     // handling border cases
     for (int j = 0; j < factor; j++){
@@ -77,9 +80,10 @@ public class Purification {
       System.out.println("Sample Pos #" + (ns - 1 - j) + ": " + sound.getSample(ns - 1 - j).getAmp());
     } // end for
     
+    // little cheers when finish
     System.out.println("\nYAYYY ALL DONE! \n");
     
-    return sound;
+    return sound; // to be placed on player for user's appreciation / saved .
   } // end clean
 
   

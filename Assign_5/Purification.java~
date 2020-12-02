@@ -20,16 +20,17 @@ public class Purification {
 
   public Purification() {
     snd  = new Sound();  // user select the sound sample
-    //snd  = new Sound(""); // DEBUG: pre-defined picture
     player = new SoundPlayer(snd);
    
-    player.waitForUser(); // Await users see the original, then press OK
+    player.waitForUser(); // Await users hear the original, then press OK
     snd = clean(snd, 2);  // non-destructive
-    //player.placeSound(snd);
-    //player.waitForUser();
     
-    //saving before closing makes more sense
-    snd.save("cleaned.wav"); // let's user to pick a name and folder
+    //new sound placed on player for user's evaluation
+    player.placeSound(snd); // user can hear the new sound
+    player.waitForUser();  // click ok to save it
+    
+    //user chooses name and directory
+    snd.save(); 
     
     
     player.close();
@@ -46,7 +47,7 @@ public class Purification {
   private Sound clean ( Sound sound, int factor ) {
     Sample spl;
     int ns = sound.getNumSamples();
-    System.out.println("NumSamples: " + ns + "***************\n");
+    System.out.println("NumSamples: " + ns + "\n***************\n");
     //int sr = sound.getSampleRate();
     
     // scan .wav
@@ -57,23 +58,26 @@ public class Purification {
       // get the average
       for (int j = -factor; j <= factor; j++ ){
         newAmp += sound.getSample(i+j).getAmp()/(2*factor+1);  
-        System.out.println("Sample Pos #" + (i+j) + ": " + sound.getSample(i+j).getAmp());
+        //System.out.println("Sample Pos #" + (i+j) + ": " + sound.getSample(i+j).getAmp());
       }
       // set the new Amp
       spl.setAmp((int)newAmp);
-      System.out.println("Sample Pos #" + i + ": " + newAmp + " * * * * \n");
+      if (i%1000 == 0){
+        System.out.println("Sample Pos #" + i + ": " + newAmp + "\n* * * * * * \n");
+      }
       
     } // end for
     
-    System.out.println("\nBorderline disorder: (start && end) set to zero \n");
+    System.out.println("\nFixing Borderline Disorder: (start && end) set to zero \n");
     // handling border cases
     for (int j = 0; j < factor; j++){
-      sound.getSample(j).setAmp(0); // initial 'factor' samples set to 0
+      sound.getSample(j).setAmp(0); // # of initial 'factor' samples set to 0
       System.out.println("Sample Pos #" + (j) + ": " + sound.getSample(j).getAmp());
-      sound.getSample(ns - 1 - j).setAmp(0); //last 'factor' samples set to 0
+      sound.getSample(ns - 1 - j).setAmp(0); // # of last 'factor' samples set to 0
       System.out.println("Sample Pos #" + (ns - 1 - j) + ": " + sound.getSample(ns - 1 - j).getAmp());
     } // end for
     
+    System.out.println("\nYAYYY ALL DONE! \n");
     
     return sound;
   } // end clean

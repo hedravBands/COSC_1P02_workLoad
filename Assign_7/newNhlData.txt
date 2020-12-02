@@ -1,0 +1,6 @@
+Sabres	40	33	19
+Canadians	39	34	18
+Bruins	45	44	12
+Senators	30	37	13
+Leafs	28	47	10
+	1	1	1
