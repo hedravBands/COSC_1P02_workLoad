@@ -1,0 +1,106 @@
+package Assign_7;
+
+import BasicIO.*;                // for IO classes
+import static BasicIO.Formats.*; // for field formats
+import static java.lang.Math.*;  // for math constants and functions
+
+/* This class represents a Team in the NHL
+*/
+public class Team {
+  private String  teamName;  // name of a team
+  private int  goalsFor;     // total of goas for a team
+  private int  goalsAgainst; // Total of goals against this a team
+  private int  totalPoints;  // total of acumulated points on NHL
+  
+  final int WIN = 2; //increment if win
+  final int TIE = 1; // increment if tie
+  final int LOSS = 0; // increment if loss
+  
+  /** This constructor creates a new Item loading its attributes from a file.
+    * 
+    * @param  from  file to load attributes from                               */
+  
+  public Team ( ASCIIDataFile from ) {
+    
+       teamName = from.readString();  
+       if ( ! from.isEOF() ) {
+         goalsFor = from.readInt();
+         goalsAgainst = from.readInt();
+         totalPoints = from.readInt();
+       }
+   
+  };  // constructor
+  
+  
+  /*This method returns a team's teamName/
+   *
+   * @ return String the team's teamName```*/
+  
+ 
+  // GETTERS AND SETTERS
+  
+  public String getTeamName(){
+    return teamName;
+  } // getTeamName
+  
+  public int getGoalsFor(){
+    return goalsFor;
+  }
+  
+  public int getGoalsAgainst(){
+    return goalsAgainst;
+  }
+  
+  public int getPoints(){
+    return totalPoints;
+  }
+  
+  private void setGoalsFor(int gF){
+    this.goalsFor += gF;
+  }
+  
+  private void setGoalsAgainst(int gA){
+    this.goalsAgainst += gA;
+  }
+  
+  private void setPoints(int delta){
+    this.totalPoints += delta;
+  }
+  //END OF GETTERS AND SETTERS
+  
+  
+  /* This method update score and points for a team
+   * given the goals for and goals against in a given play
+   * @param gF int the number goals for
+   * @param gA int the number of goals against
+   */
+  
+  public void play (int gF, int gA){
+    if (gF == -1 || gA == -1){ // team did not play
+    } else { 
+      setGoalsFor(gF);
+      setGoalsAgainst(gA);
+      if (gF > gA) {setPoints(WIN); 
+      } else if (gF == gA) { 
+        setPoints(TIE);
+      }  else {setPoints(LOSS);}
+    }
+  }  // play
+    
+  
+  
+  /** This method writes the team's attributes to an output file
+    * 
+    * @param  to  the file to write the attributes to. 
+    */
+  
+  public void writeDataLine ( ASCIIOutputFile to ) {
+    to.writeString(teamName);
+    to.writeInt(goalsFor);
+    to.writeInt(goalsAgainst);
+    to.writeInt(totalPoints);
+    to.newLine();
+  }  // writeDataLine
+
+    
+} // Team  

@@ -9,16 +9,16 @@ import static java.lang.Math.*;  // for math constants and functions
   * 
   * @author Heduin R. B. de Morais (Brock_ID 6967483, Campus_ID hr19ut, Lab#09) 
   * @version 1.0 (Dec. 2020)
-  * new concepts: data file processing i/o, basic forms, prompting user 
+  * new concepts: multiple classes, data file processing i/o, basic forms, 
   * 
   * @param nhlData, newNhlData file i/o
-  * @param prompt
+  * @param display form
 */
 
 public class Stats {
   
-  private ASCIIDataFile    nhlData; // input data file with the raw scores (reading .txt file)
-  private BasicForm        display; // form for user input
+  private ASCIIDataFile    nhlData;     // input data file with the raw scores (reading .txt file)
+  private BasicForm        display;     // form for user input
   private ASCIIOutputFile  newNhlData;  // new (updated) inventory file
   private ReportPrinter    report;      // printer for report
 
@@ -34,88 +34,42 @@ public class Stats {
     //You will be prompted to print (choose print to pdf)
     //Run the program and then it will prompt you to save the pdf
     //Type the name of the output pdf
-   
+    
     nhlData = new ASCIIDataFile();
-    newNhlData =  new ASCIIDataFile();  //make to be the same~~ 
-    display = new BasicForm();
+    newNhlData =  new ASCIIOutputFile(); 
+    display = new BasicForm("Enter", "Bye");
     report = new ReportPrinter();
-    buildForm();
     
-
-    String team = ""; 
-    int pos = 0; // score for
-    int neg = 0; // score against
-    int pts = 0; // balance of points
-    
-    int seq = 0; // column counter
-       
+    buildForm(); // form constructor 
     setupReport(); //report header
     
     
     //read from file, prompt user, write data    
     for ( ; ; ) {
+            
+      Team aTeam = new Team(nhlData);
       
-      if ( nhlData.isEOF() ) { break; }
+      if (nhlData.isEOF()) break;
       
-      //iterate a row of a given student, calculate one's weighted average and add it to totalAverage tAvg
-      
-      //read line
-       team = nhlData.readString();  
-       pos = nhlData.readInt();
-       neg = nhlData.readInt();
-       pts = nhlData.readInt();
+      fillForm(aTeam.getTeamName());
+      int button = display.accept();
        
-       //returns newPos newNeg, or bye 
-       pos, neg, buttonPressed  prompt (team);
-       if (returned == bye){
-         writeData (team, pos, neg, pts);
-       } else {
-         if (pos > neg){pts += 2}
-         if (pos == neg) {pts++}
-         writeData(team, pos+newPos, neg+newNeg, pts) 
-       }
-      switch ( seq % K) { 
-        case 0: 
-          team = nhlData.readString(); 
-          break;
-        case 1: 
-          pos = nhlData.readInt(); 
-          break;
-        case 2: 
-          a1 = nhlData.readDouble(); 
-          wAvg += 10*a1/10;
-          break; 
-        case 3: 
-          a2 = nhlData.readDouble(); 
-          wAvg += 10*a2/10; 
-          break; 
-        case 4: 
-          test = nhlData.readDouble(); 
-          wAvg += 30*test/50; 
-          break;
-        case 5: 
-          exam = nhlData.readDouble(); 
-          wAvg += 50*exam/100; 
-          // add each student's weigthed average wAvg to total score tAvg
-          tAvg += wAvg;        
-          // insert one row containing all student data on file and report    
-          writeStData(stCode, stName, a1, a2, test, exam, wAvg);
-          // reset wAvg for the next student
-          wAvg = 0; 
+       //returns newPos newNeg, or bye (button is 1)
+      if (button > 0){     // button == 1: bye button has been pressed
+        aTeam.play(-1,-1); // value -1 means: Team did not play 
+       } else { // button == 0: enter button has been pressed
+         int newPos = display.readInt("pos");
+         int newNeg = display.readInt("neg");
+         aTeam.play(newPos, newNeg); // update data
+        }
+      aTeam.writeDataLine(newNhlData); // write line to file after being updated
+      writeReportLine(aTeam); // print line to PDF after being updated
       
-      } // end switch
-      
-      // keep tracking of the column
-      ++seq;      
-         
     } // end for
-    
-    // add last 2 lines in the pdf 
-    // total # of student is "seq/6".
-    // Average score is tAvg/(seq/6)
-    writeSummary(tAvg/(seq/6), seq/6);
-    
+
+    display.close();
     nhlData.close();
+    newNhlData.close();
     report.close();
     
   } // Constructor Stats
@@ -123,59 +77,28 @@ public class Stats {
   
    /** This method creates the form for user interaction.                      */
   
-  private void buildForm (String team ) {
+  private void buildForm () {
     
     display.setTitle("NHL Stats");//the title of the window.
-    //display.addTextField("textfieldName", "Textfield Label", width, x, y);
-    //where "textfieldName"   is a unique name given for the components on the form,
-    //                        it is case sensitive String and contains no spaces,
-    //      "Textfield Label" is a string and has no restrictions,
-    //      width             is an int of how many characters should be shown
-    //                        i.e., if the width is 1, the textfield is narrow
-    //                        but if it is 10, it would be wider,
-    //      x                 the x-coordinate on the screen,
-    //      y                 the y-coordinate on the screen,
-    //Note, the coordinate (0, 0) is at the top left of the form.
-    ///////////////////////////////////////////////////////////////////////////////////
-    //display.setEditable("textfieldName", boolean);
-    //where "textfieldName" is the unique name given for the textfield, which means you
-    //                      must create the textfield first before using setEditable.
-    //      boolean         is the value true or false. If it is true, then the user is
-    //                      allowed to enter text, if false, then the textfield is 
-    //                      disabled and the user cannot change its value.
-    //Note, if the display.setEditable(...); is not used, then the text field
-    //is set to true by default (i.e., the user can enter information).
-    //For example, look at the quant textfield.
-    display.addTextField("team","Team",9,10,10);
+
+    display.addTextField("team","Team",10,30,10);
     display.setEditable("team",false);    
-    display.addTextField("pos","For",3,10,100);    
-    display.addTextField("neg","Against",3,20,100);
+    display.addTextField("pos","For",3,10,40);    
+    display.addTextField("neg","Against",3,120,40);
   };  // buildForm
   
   
   /** This method enters the item data into the form.
     * 
-    * @param  itemNum  the item number
-    * @param  reorder  the reorder point
-    * @param  quant    the quantity on hand                                   */
+    * @param  team String name of the team
+ */
   
-  private void fillForm ( String itemNum, int reorder, int quant ) {
+  private void fillForm(String team) {
     
-    display.clearAll();//deletes all text in all the textfields in the form.
-    //To write something to a textfield, you need to specify the type, i.e.,
-    //using writeString, writeInt, writeDouble, etc. as well as the unqiue 
-    //textfield name and the actual value to insert in the textfield.
-    display.writeString("itemNum",itemNum);
-    display.writeInt("reorder",reorder);
-    display.writeInt("quant",quant);
-    
+    display.clearAll();
+    display.writeString("team", team);
+
   };  // fillForm
-  
-  
-  
-  
-  
-  
   
   
     /** This method sets up the report, adding title and all colum names 
@@ -183,37 +106,27 @@ public class Stats {
       */  
   private void setupReport(){
     report.setTitle("NHL Hockey Statistics");
-    report.addField("team", "   Team", 9);
+    report.addField("team", "Team", 10);
     report.addField("pos", "For", 3);
     report.addField("neg", "Against",7);
     report.addField("pts", "Points", 6);
   };  // setupReport
   
-       
-  /** This method writes a record to PDF report/ newFile
-    * 
-    * @param team String Team name 
-    * @param pos int score for total
-    * @param neg int score against total
-    * @param pts int accumulated points
-    */  
+    
   
-  private void writeNhlData (String team, int pos, int neg, int pts) {    
-    //writes for PDF
-    report.writeString("team", team);     
-    report.writeString("pos", pos);    
-    report.writeDouble("neg", neg);    
-    report.writeDouble("pts", pts); 
-    
-    //writes for file        
-    newNhlData.writeString(team);
-    newNhlData.writeInt(pos);
-    newNhlData.writeInt(neg);
-    newNhlData.writeInt(pts);
-    newNhlData.newLine();
-    
-  };  // writeStData
+  /** This method writes the team's attributes to PDF report
+    * 
+    * @param  to  the file to write the attributes to. 
+    */
+  
+  public void writeReportLine (Team team) {    
+    report.writeString("team", team.getTeamName());     
+    report.writeInt("pos", team.getGoalsFor());    
+    report.writeInt("neg", team.getGoalsAgainst());    
+    report.writeInt("pts", team.getPoints()); 
+  };  // writeReportLine
    
+       
     
 // main function
 public static void main ( String[] args ) { Stats s = new Stats(); };
