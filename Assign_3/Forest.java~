@@ -1,38 +1,29 @@
-package Assign_3;
+package Assign_4_A;
 
 import Media.*;                  // for Turtle and TurtleDisplayer
-import static Media.Turtle.*;    // for Turtle speeds
 import static java.lang.Math.*;  // for Math constants and functions
 import static java.awt.Color.*;  // for Color constants
 
 
 
-/** This class is a program to build a Forest in the Fall season by using 
-  * randomly generated numbers to produce different number and sizes of trees within given ranges.
-  * It also select the color of the leaves between green and red with a proportion 3:1
-  * The layout is horizontally symetric and the ground is vertically centred.
-  * 
+/** This class is a program to build convert to negative a given color picture 
+ 
   * @author Heduin R. B. de Morais (Brock_ID 6967483, Campus_ID hr19ut, Lab#09) 
   * 
-  * @version 1.0 (Oct 2020)
+  * @version 1.0 (Nov. 2020)
   *
-  * new concepts: attributes selected by a probabilistic share
+  * new concepts: pixels and color channels
   * 
   * @param sizeSpoke ramdomly set [10,20] = 11 possibilities (10+0 .. 10+11)
-  * @param heigthTrunk ramdomly set [40,100] = 61 possibilities (40+0 .. 40+60)
-  * @param nTree ramdomly set [5,10] = 6 possibilities (5+0 .. 5+5)
   * @param canvasSide set by default as 300 pxl, customizable 
 */
 
-public class Forest {
+public class Negative {
   private TurtleDisplayer display; //standard display (300,300) pxl
   private Turtle ttl; // the drawing turtle
-  private int canvasSide; // the side of canvas
-  private double sizeSpoke; // randomly generated
-  private int heightTrunk;  // randomly generated
-  private double spaceX; // returned by method moveToStart() 
 
-  public Forest ( ) {
+
+  public Negative() {
     
     ttl = new Turtle(0); // constructor of the drawing turtle "ttl" with super speed (int lower the faster)
     canvasSide = 300; //  Let's setup the default, but it is now customizable, e.g. try 500 or 800 
@@ -218,8 +209,8 @@ public class Forest {
   
   
 // main function
-public static void main ( String[] args ) { Forest amazon  = new Forest(); };
+public static void main ( String[] args ) { Negative n  = new Negative(); };
 
 
-}  // Forest
+}  // Negative
     

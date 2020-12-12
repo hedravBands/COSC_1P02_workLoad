@@ -21,8 +21,8 @@ public class Normalize {
   Picture pic;
 
   public Normalize() {
-    pic = new Picture();  // user select the picture
-    //pic = new Picture("mission_beach_darker.jpg"); // DEBUG: pre-defined picture
+    //pic = new Picture();  // user select the picture
+    pic = new Picture("mission_beach_darker.jpg"); // DEBUG: pre-defined picture
     display = new PictureDisplayer(pic);
    
     display.waitForUser(); // Await users see the original, then press OK
@@ -72,7 +72,7 @@ public class Normalize {
       maxLocal = maxChannel(p); // max value per pixel 
       if ( maxLocal > maxRGB){
         maxRGB = maxLocal; //  max of all pixels
-        //System.out.println("New MaxRG: " + maxRGB); // DEBUG
+        System.out.println("New MaxRG: " + maxRGB); // DEBUG
       } //end if
     } // end while
       

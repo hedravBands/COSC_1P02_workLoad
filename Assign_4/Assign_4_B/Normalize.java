@@ -21,15 +21,15 @@ public class Normalize {
   Picture pic;
 
   public Normalize() {
-    //pic = new Picture();  // user select the picture
-    pic = new Picture("mission_beach_darker.jpg"); // DEBUG: pre-defined picture
+    pic = new Picture();  // user select the picture
+    //pic = new Picture("mission_beach_darker.jpg"); // DEBUG: pre-defined picture
     display = new PictureDisplayer(pic);
    
     display.waitForUser(); // Await users see the original, then press OK
     normIntensity(pic);  // non-destructive
     
     //saving before closing makes more sense
-    pic.save(); // let's user to pick a name and folder
+    pic.save(); // let user to pick a name and folder
     //pic.save("normalized.jpg"); // DEBUG: pre-defined output name.jpg (destructive)
     
     display.close();
